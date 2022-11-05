@@ -3,15 +3,15 @@ import { Peer } from "./peer";
 export class Client extends Peer {
     
     public async init() {
-        const local = this.local;
+        const rtc = this.rtc;
 
         const host:RTCSessionDescription = JSON.parse(window.prompt("Paste Host Session"));
 
         var p = this.getCandidates();
 
-        await local.setRemoteDescription(host);
-        const answer = await local.createAnswer();
-        await local.setLocalDescription(answer)
+        await rtc.setRemoteDescription(host);
+        const answer = await rtc.createAnswer();
+        await rtc.setLocalDescription(answer)
 
         const candidate_count = await p;
         console.log(`found ${candidate_count} ICE candidates...`);
@@ -20,13 +20,13 @@ export class Client extends Peer {
         
 
         // receiving a data channel...
-        local.ondatachannel = (event) => {
+        rtc.ondatachannel = (event) => {
             console.log("CLIENT: data channel!");
             this.channel_init(event.channel);    
         }
 
 
-        const client_json = JSON.stringify(local.localDescription.toJSON());
+        const client_json = JSON.stringify(rtc.localDescription.toJSON());
         //console.log("CLIENT: ");
         //console.log(client_json);
         await navigator.clipboard.writeText(client_json);

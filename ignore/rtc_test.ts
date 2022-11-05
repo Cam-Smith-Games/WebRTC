@@ -39,8 +39,6 @@ remote.ondatachannel = function (event) {
 
     receiveChannel = event.channel;
     receiveChannel.onmessage = function(e) {
-        console.log("handleReceiveMessage: ", e);    
-
         const div = document.createElement("div");
         div.innerText = e.data;
         document.getElementsByTagName("main")[0].append(div);
